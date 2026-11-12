@@ -21,3 +21,11 @@ id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness,po
 20,Fuego Lento,Luna Cruz,latin,romantic,0.70,100,0.78,0.86,0.30,80,2020s,sensual;festive,0.02,0.20
 21,Neon Heartbeat,Max Pulse,pop,happy,0.88,126,0.86,0.84,0.08,90,2020s,euphoric;sunny,0.01,0.10
 22,Golden Hour Drive,Neon Echo,pop,happy,0.70,112,0.80,0.75,0.25,66,2010s,sunny;nostalgic,0.03,0.12
+23,Afterglow Avenue,Velvet Static,house,euphoric,0.84,124,0.74,0.90,0.06,72,2010s,euphoric;festive,0.55,0.18
+24,Sunday Kitchen,Mavis Hart,soul,uplifting,0.58,96,0.80,0.70,0.55,61,1970s,soulful;warm,0.05,0.30
+25,Broken Sirens,The Static Kids,punk,angry,0.94,180,0.40,0.55,0.05,50,1990s,aggressive;rebellious,0.02,0.45
+26,Slow Motion Rain,Ivy Calder,indie folk,sad,0.33,82,0.30,0.42,0.88,47,2010s,melancholic;tender,0.04,0.12
+27,Midnight Run Club,Verse Theory,trap,intense,0.86,140,0.45,0.82,0.04,79,2020s,aggressive;driving,0.01,0.15
+28,Quiet Hours,Paper Lanterns,lofi,focused,0.38,75,0.55,0.57,0.80,44,2020s,focused;cozy,0.92,0.05
+29,Heartbreak Highway,Willow Creek,country,sad,0.48,92,0.32,0.55,0.70,55,2000s,melancholic;nostalgic,0.03,0.20
+30,Glass City Lights,Midori Sato,city pop,nostalgic,0.68,116,0.75,0.78,0.30,57,1980s,nostalgic;dreamy,0.05,0.15
