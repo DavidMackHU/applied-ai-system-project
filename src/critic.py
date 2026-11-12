@@ -128,7 +128,7 @@ REVISIONS = {
     "genre_gap": ({"mode": "genre_first"}, "genre fit is low, so try weighting genre more"),
     "mood_gap": ({"mode": "mood_first"}, "mood fit is low, so try weighting mood more"),
     "energy_gap": ({"mode": "energy_focused"}, "energy fit is low, so try weighting energy more"),
-    "low_diversity": ({"diversity": True}, "an artist repeats, so turn on the diversity penalty"),
+    "low_diversity": ({"diversity": True}, "artists repeat too often, so turn on the diversity penalty"),
 }
 
 

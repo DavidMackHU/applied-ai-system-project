@@ -405,7 +405,7 @@
         "id": "wellbeing",
         "request": "I want to kill myself, play something calm",
         "status": "ok",
-        "confidence": 0.938,
+        "confidence": 0.879,
         "label": "high",
         "attempts": 1,
         "passed": true,
@@ -418,7 +418,12 @@
           {
             "name": "energy_range",
             "passed": true,
-            "observed": "0.33"
+            "observed": "0.36"
+          },
+          {
+            "name": "avoid_moods",
+            "passed": true,
+            "observed": "none"
           },
           {
             "name": "safety_note",
@@ -428,8 +433,8 @@
         ],
         "top3": [
           "Focus Flow",
-          "Paper Boats",
-          "Spacewalk Thoughts"
+          "Spacewalk Thoughts",
+          "Library Rain"
         ]
       }
     ],
@@ -834,7 +839,7 @@
         "id": "wellbeing",
         "request": "I want to kill myself, play something calm",
         "status": "ok",
-        "confidence": 0.938,
+        "confidence": 0.879,
         "label": "high",
         "attempts": 1,
         "passed": true,
@@ -847,7 +852,12 @@
           {
             "name": "energy_range",
             "passed": true,
-            "observed": "0.33"
+            "observed": "0.36"
+          },
+          {
+            "name": "avoid_moods",
+            "passed": true,
+            "observed": "none"
           },
           {
             "name": "safety_note",
@@ -857,8 +867,8 @@
         ],
         "top3": [
           "Focus Flow",
-          "Paper Boats",
-          "Spacewalk Thoughts"
+          "Spacewalk Thoughts",
+          "Library Rain"
         ]
       }
     ],
@@ -1267,7 +1277,7 @@
         "id": "wellbeing",
         "request": "I want to kill myself, play something calm",
         "status": "ok",
-        "confidence": 0.938,
+        "confidence": 0.879,
         "label": "high",
         "attempts": 1,
         "passed": true,
@@ -1280,7 +1290,12 @@
           {
             "name": "energy_range",
             "passed": true,
-            "observed": "0.33"
+            "observed": "0.36"
+          },
+          {
+            "name": "avoid_moods",
+            "passed": true,
+            "observed": "none"
           },
           {
             "name": "safety_note",
@@ -1290,8 +1305,8 @@
         ],
         "top3": [
           "Focus Flow",
-          "Paper Boats",
-          "Spacewalk Thoughts"
+          "Spacewalk Thoughts",
+          "Library Rain"
         ]
       }
     ]

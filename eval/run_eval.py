@@ -67,6 +67,9 @@ def check_case(result: AgentResult, expect: Dict) -> List[Tuple[str, bool, str]]
         artists = [s["artist"] for s in songs]
         checks.append(("unique_artists", len(set(artists)) == len(artists),
                        f"{len(set(artists))}/{len(artists)}"))
+    if "avoid_moods" in expect:
+        bad = [s["title"] for s in songs if s["mood"] in expect["avoid_moods"]]
+        checks.append(("avoid_moods", not bad, ", ".join(bad) or "none"))
     if expect.get("safety_note"):
         checks.append(("safety_note", bool(result.safety_note), "shown" if result.safety_note else "missing"))
     return checks

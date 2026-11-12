@@ -32,6 +32,7 @@ from src.recommender import rank_songs
 
 logger = logging.getLogger("vibefinder.agent")
 DIVERSITY_PREFERENCE = 0.05
+WELLBEING_AVOID_MOODS = {"sad", "melancholic", "angry"}
 
 
 @dataclass
@@ -253,6 +254,12 @@ class VibeAgent:
                       excluded=sorted(exclude))
         if self.use_rag:
             self._apply_knowledge(prefs, understood, citations, activity)
+        if safety:
+            # Don't amplify distress: leave out songs tagged with heavy moods.
+            heavy = {s["id"] for s in self.songs if s["mood"] in WELLBEING_AVOID_MOODS}
+            exclude |= heavy
+            self._log("guardrail", "wellbeing_filter",
+                      f"excluded {len(heavy)} songs tagged {', '.join(sorted(WELLBEING_AVOID_MOODS))}")
         k = k or parsed.k or self.k
 
         # ---- ACT / CHECK / REVISE loop
@@ -288,7 +295,7 @@ class VibeAgent:
             self._log("revise", "change_strategy", f"{reason}: {change}", change=change)
 
         def selection_score(attempt) -> float:
-            # Confidence decides, but an attempt that still repeats an artist pays a small
+            # Confidence decides, but an attempt with low artist diversity pays a small
             # penalty, so a diverse list wins when it costs less than 0.05 confidence.
             return attempt[0] - (DIVERSITY_PREFERENCE if "low_diversity" in attempt[4].issues else 0.0)
 
@@ -298,7 +305,7 @@ class VibeAgent:
         self._log("final", "select_best",
                   f"kept attempt {iteration} of {len(attempts)} (confidence {confidence:.2f}, "
                   f"mode={best_state['mode']}, diversity={'on' if best_state['diversity'] else 'off'}); "
-                  f"rule: highest confidence, minus {DIVERSITY_PREFERENCE} if an artist repeats")
+                  f"rule: highest confidence, minus {DIVERSITY_PREFERENCE} if artist diversity is below 0.8")
 
         message = self._summarize(results, understood, critique)
         return AgentResult(

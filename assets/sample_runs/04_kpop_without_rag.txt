@@ -1,0 +1,21 @@
+$ python -m src.app k-pop\ dance\ hits --no-rag 
+
+Request: "k-pop dance hits"
+Status: OK | confidence 0.51 (low) | mode balanced | diversity off | attempts 2
+Understood: genre = k-pop (keyword 'k-pop'); popularity = 80 (word 'hits')
++---+-------------------+--------------+---------------------+--------+-------+------------------------------------+
+| # | Title             | Artist       | Genre / Mood        | Energy | Score | Reasons                            |
++===+===================+==============+=====================+========+=======+====================================+
+| 1 | Fuego Lento       | Luna Cruz    | latin / romantic    | 0.70   | 0.50  | popularity 80 vs target 80 (+0.50) |
++---+-------------------+--------------+---------------------+--------+-------+------------------------------------+
+| 2 | Midnight Run Club | Verse Theory | trap / intense      | 0.86   | 0.49  | popularity 79 vs target 80 (+0.49) |
++---+-------------------+--------------+---------------------+--------+-------+------------------------------------+
+| 3 | Sunrise City      | Neon Echo    | pop / happy         | 0.82   | 0.49  | popularity 78 vs target 80 (+0.49) |
++---+-------------------+--------------+---------------------+--------+-------+------------------------------------+
+| 4 | Gym Hero          | Max Pulse    | pop / intense       | 0.93   | 0.49  | popularity 82 vs target 80 (+0.49) |
++---+-------------------+--------------+---------------------+--------+-------+------------------------------------+
+| 5 | Concrete Crown    | Verse Theory | hip hop / confident | 0.78   | 0.47  | popularity 85 vs target 80 (+0.47) |
++---+-------------------+--------------+---------------------+--------+-------+------------------------------------+
+Critic: genre_fit 0.00, diversity 0.80, strength 1.00
+Note: The catalog has no 'k-pop' songs, so related genres stand in for it.
+Top pick: Fuego Lento by Luna Cruz (latin, romantic, energy 0.70). It scored highest because of: popularity 80 vs target 80. I read your request as: genre = k-pop (keyword 'k-pop'), popularity = 80 (word 'hits').

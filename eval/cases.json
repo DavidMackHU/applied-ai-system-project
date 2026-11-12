@@ -207,6 +207,11 @@
    "energy_range": [
     0.0,
     0.5
+   ],
+   "avoid_moods": [
+    "sad",
+    "melancholic",
+    "angry"
    ]
   }
  }

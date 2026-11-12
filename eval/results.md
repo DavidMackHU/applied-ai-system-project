@@ -57,8 +57,9 @@
 +---------------+-----------+-------+-------+--------+-----------------------------+
 | off_topic     | off_topic | -     | 0     | PASS   | ok status: off_topic        |
 +---------------+-----------+-------+-------+--------+-----------------------------+
-| wellbeing     | ok        | 0.94  | 1     | PASS   | ok status: ok               |
-|               |           |       |       |        | ok energy_range: 0.33       |
+| wellbeing     | ok        | 0.88  | 1     | PASS   | ok status: ok               |
+|               |           |       |       |        | ok energy_range: 0.36       |
+|               |           |       |       |        | ok avoid_moods: none        |
 |               |           |       |       |        | ok safety_note: shown       |
 +---------------+-----------+-------+-------+--------+-----------------------------+
 ```
@@ -68,7 +69,7 @@
 | Configuration | Cases passed | Avg confidence (ok cases) | Failed cases |
 |---|---|---|---|
 | full | 15/16 | 0.77 | implicit_sad |
-| no_rag | 12/16 | 0.68 | studying, implicit_sad, unknown_genre, road_trip |
+| no_rag | 12/16 | 0.67 | studying, implicit_sad, unknown_genre, road_trip |
 | no_classifier | 15/16 | 0.77 | implicit_sad |
 
 ## Mood classifier vs. keyword baseline (holdout set)

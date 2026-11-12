@@ -1,0 +1,51 @@
+$ python -m src.app something\ like\ Storm\ Runner --trace --save-trace 
+
+Request: "something like Storm Runner"
+Status: OK | confidence 0.66 (medium) | mode balanced | diversity off | attempts 2
+Understood: genre = rock (from 'Storm Runner'); mood = intense (from 'Storm Runner'); energy = 0.91 (from 'Storm Runner'); mood_tags = aggressive, driving (from 'Storm Runner')
+Knowledge used:
+  - genres.md#rock: related genres: punk 0.7, metal 0.6, blues 0.4, indie pop 0.3
+  - moods.md#intense: related moods: angry 0.7, confident 0.5, euphoric 0.3
++---+-------------------+-----------------+---------------------+--------+-------+---------------------------------------------------+
+| # | Title             | Artist          | Genre / Mood        | Energy | Score | Reasons                                           |
++===+===================+=================+=====================+========+=======+===================================================+
+| 1 | Broken Sirens     | The Static Kids | punk / angry        | 0.94   | 4.05  | related genre: punk via rock guide (+1.40)        |
+|   |                   |                 |                     |        |       | related mood: angry via intense guide (+0.70)     |
+|   |                   |                 |                     |        |       | energy 0.94 vs target 0.91 (+1.46)                |
+|   |                   |                 |                     |        |       | mood tags: aggressive (+0.50)                     |
++---+-------------------+-----------------+---------------------+--------+-------+---------------------------------------------------+
+| 2 | Iron Tempest      | Grave Signal    | metal / angry       | 0.97   | 3.81  | related genre: metal via rock guide (+1.20)       |
+|   |                   |                 |                     |        |       | related mood: angry via intense guide (+0.70)     |
+|   |                   |                 |                     |        |       | energy 0.97 vs target 0.91 (+1.41)                |
+|   |                   |                 |                     |        |       | mood tags: aggressive (+0.50)                     |
++---+-------------------+-----------------+---------------------+--------+-------+---------------------------------------------------+
+| 3 | Midnight Run Club | Verse Theory    | trap / intense      | 0.86   | 3.42  | mood match: intense (+1.00)                       |
+|   |                   |                 |                     |        |       | energy 0.86 vs target 0.91 (+1.42)                |
+|   |                   |                 |                     |        |       | mood tags: aggressive, driving (+1.00)            |
++---+-------------------+-----------------+---------------------+--------+-------+---------------------------------------------------+
+| 4 | Gym Hero          | Max Pulse       | pop / intense       | 0.93   | 2.97  | mood match: intense (+1.00)                       |
+|   |                   |                 |                     |        |       | energy 0.93 vs target 0.91 (+1.47)                |
+|   |                   |                 |                     |        |       | mood tags: driving (+0.50)                        |
++---+-------------------+-----------------+---------------------+--------+-------+---------------------------------------------------+
+| 5 | Concrete Crown    | Verse Theory    | hip hop / confident | 0.78   | 2.31  | related mood: confident via intense guide (+0.50) |
+|   |                   |                 |                     |        |       | energy 0.78 vs target 0.91 (+1.30)                |
+|   |                   |                 |                     |        |       | mood tags: driving (+0.50)                        |
++---+-------------------+-----------------+---------------------+--------+-------+---------------------------------------------------+
+Critic: genre_fit 0.26, mood_fit 0.78, energy_fit 0.88, diversity 0.80, strength 0.74
+Note: No other 'rock' songs are in the catalog, so related genres fill the list.
+Top pick: Broken Sirens by The Static Kids (punk, angry, energy 0.94). It scored highest because of: related genre: punk via rock guide; related mood: angry via intense guide; energy 0.94 vs target 0.91. I read your request as: genre = rock (from 'Storm Runner'), mood = intense (from 'Storm Runner'), energy = 0.91 (from 'Storm Runner'), mood_tags = aggressive, driving (from 'Storm Runner').
+Agent trace:
+   1. [guardrail] check_input: request passed input checks
+   2. [plan] parse_request: nothing explicit found
+   3. [plan] make_plan: search_catalog: seed profile from 'Storm Runner' | retrieve_knowledge: add related genres from the genre guide | retrieve_knowledge: add related moods from the mood guide | recommend: score and rank the catalog | critique: check fit and confidence | revise: up to 2 alternative strategies if confidence is not high
+   4. [act] search_catalog: seeded from 'Storm Runner' by Voltline; excluding mentioned songs
+   5. [act] retrieve_knowledge: genres.md#rock -> related genres: punk 0.7, metal 0.6, blues 0.4, indie pop 0.3
+   6. [act] retrieve_knowledge: moods.md#intense -> related moods: angry 0.7, confident 0.5, euphoric 0.3
+   7. [act] recommend: attempt 1 (mode=balanced, diversity=off): Broken Sirens, Iron Tempest, Midnight Run Club, Gym Hero, Concrete Crown
+   8. [check] critique: confidence 0.66 (medium); genre_fit=0.26, mood_fit=0.78, energy_fit=0.88, diversity=0.80, strength=0.74; issues: genre_gap
+   9. [revise] change_strategy: genre fit is low, so try weighting genre more: {'mode': 'genre_first'}
+  10. [act] recommend: attempt 2 (mode=genre_first, diversity=off): Broken Sirens, Iron Tempest, Midnight Run Club, Delta Midnight, Rooftop Lights
+  11. [check] critique: confidence 0.60 (medium); genre_fit=0.40, mood_fit=0.48, energy_fit=0.70, diversity=1.00, strength=0.71; no issues
+  12. [check] stop: no untried revision addresses the remaining issues
+  13. [final] select_best: kept attempt 1 of 2 (confidence 0.66, mode=balanced, diversity=off); rule: highest confidence, minus 0.05 if artist diversity is below 0.8
+Trace saved to logs\traces\20261112-101307_something-like-storm-runner.jsonl
