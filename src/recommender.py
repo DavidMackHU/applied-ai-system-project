@@ -184,13 +184,27 @@ def score_song(user_prefs: Dict, song: Dict, mode: Optional[Any] = None) -> Tupl
             score += points
             reasons.append(f"{label} (+{points:.2f})")
 
+    # Exact label matches earn full points. Retrieval (RAG) can add "related" labels
+    # with a similarity weight, which earn partial credit instead of nothing.
+    sources = user_prefs.get("sources") or {}
     genre = user_prefs.get("genre")
-    if genre and str(song.get("genre", "")).lower() == str(genre).lower():
+    song_genre = str(song.get("genre", "")).lower()
+    related_genres = user_prefs.get("related_genres") or {}
+    if genre and song_genre == str(genre).lower():
         add(weights.genre, f"genre match: {song['genre']}")
+    elif song_genre in related_genres:
+        via = sources.get(f"genre:{song_genre}", "knowledge base")
+        add(weights.genre * related_genres[song_genre],
+            f"related genre: {song_genre} via {via}")
 
     mood = user_prefs.get("mood")
-    if mood and str(song.get("mood", "")).lower() == str(mood).lower():
+    song_mood = str(song.get("mood", "")).lower()
+    related_moods = user_prefs.get("related_moods") or {}
+    if mood and song_mood == str(mood).lower():
         add(weights.mood, f"mood match: {song['mood']}")
+    elif song_mood in related_moods:
+        via = sources.get(f"mood:{song_mood}", "knowledge base")
+        add(weights.mood * related_moods[song_mood], f"related mood: {song_mood} via {via}")
 
     if user_prefs.get("energy") is not None:
         target = float(user_prefs["energy"])
@@ -274,11 +288,14 @@ def rank_songs(
     k: int = 5,
     mode: Optional[Any] = None,
     diversity: bool = False,
+    exclude_ids: Optional[set] = None,
 ) -> List[Tuple[Any, float, List[str]]]:
     """Score every song, sort highest first, optionally diversify, and return the top k with reasons."""
+    exclude_ids = exclude_ids or set()
     scored = [
         (song, *score_song(user_prefs, song if isinstance(song, dict) else asdict(song), mode))
         for song in songs
+        if _attr(song, "id") not in exclude_ids
     ]
     # sorted() returns a new list and leaves the caller's catalog order untouched.
     ranked = sorted(scored, key=lambda item: (-item[1], _attr(item[0], "id")))
@@ -299,6 +316,33 @@ def recommend_songs(
         (song, score, "; ".join(reasons))
         for song, score, reasons in rank_songs(user_prefs, songs, k, mode, diversity)
     ]
+
+
+def max_possible_score(user_prefs: Dict, mode: Optional[Any] = None,
+                       catalog_genres: Optional[set] = None,
+                       catalog_moods: Optional[set] = None) -> float:
+    """Return the best score any song could earn for these prefs (used to judge result strength)."""
+    w = get_mode(mode)
+    total = 0.0
+    genre, related_g = user_prefs.get("genre"), user_prefs.get("related_genres") or {}
+    if genre and (catalog_genres is None or genre in catalog_genres):
+        total += w.genre
+    elif related_g:
+        total += w.genre * max(related_g.values())
+    mood, related_m = user_prefs.get("mood"), user_prefs.get("related_moods") or {}
+    if mood and (catalog_moods is None or mood in catalog_moods):
+        total += w.mood
+    elif related_m:
+        total += w.mood * max(related_m.values())
+    if user_prefs.get("energy") is not None:
+        total += w.energy
+    for key, weight in (("likes_acoustic", w.acoustic), ("valence", w.valence),
+                        ("decade", w.decade), ("popularity", w.popularity),
+                        ("likes_instrumental", w.instrumental)):
+        if user_prefs.get(key) is not None:
+            total += weight
+    total += w.mood_tags * min(2, len(user_prefs.get("mood_tags") or []))
+    return round(total, 4)
 
 
 # ---------------------------------------------------------------------------
