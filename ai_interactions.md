@@ -29,7 +29,7 @@ python -m src.app "high energy pop for the gym" --trace --save-trace   # writes 
 
 ### Trace 1: diversity revision ("chill lofi for studying")
 
-The plan chooses three retrieval steps. The first attempt scores high, but the critic flags repeated artists. The agent revises with the diversity penalty and keeps the varied list, because it costs only 0.04 confidence.
+The plan chooses three retrieval steps. The first attempt scores high, but the critic flags repeated artists. The agent revises with the diversity penalty and keeps the varied list, because it costs only about 0.04 confidence (0.877 to 0.835, shown rounded as 0.88 and 0.83).
 
 ```
 $ python -m src.app chill\ lofi\ for\ studying --trace --save-trace 
