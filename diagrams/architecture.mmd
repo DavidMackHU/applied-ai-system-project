@@ -2,7 +2,7 @@
 flowchart TD
     U([Listener request<br/>plain English]) --> G1{Input guardrails<br/>empty / too long /<br/>prompt injection}
     G1 -- blocked --> B([Blocked message])
-    G1 -- allowed --> W[Wellbeing check<br/>adds 988 support note]
+    G1 -- allowed --> W[Wellbeing check<br/>988 support note +<br/>filters heavy moods]
     W --> P
 
     subgraph PLAN [1. Plan]
@@ -39,7 +39,7 @@ flowchart TD
     SEL -. every step .-> T[(Trace + logs<br/>logs/vibefinder.log,<br/>logs/traces/*.jsonl)]
 
     subgraph TESTING [Humans and testing]
-        PT[pytest unit tests<br/>38 tests]
+        PT[pytest unit tests<br/>39 tests]
         EV[Eval harness<br/>16 cases x 3 configs +<br/>classifier holdout]
         HR[Human review<br/>of traces and outputs]
     end
