@@ -1,0 +1,48 @@
+%% VibeFinder AI - system architecture
+flowchart TD
+    U([Listener request<br/>plain English]) --> G1{Input guardrails<br/>empty / too long /<br/>prompt injection}
+    G1 -- blocked --> B([Blocked message])
+    G1 -- allowed --> W[Wellbeing check<br/>adds 988 support note]
+    W --> P
+
+    subgraph PLAN [1. Plan]
+        P[Local parser<br/>genre, mood, energy,<br/>decade, mentions] --> C[Mood classifier<br/>Naive Bayes on<br/>synthetic data]
+        P -. optional --llm .-> L[Claude parser<br/>JSON structured output]
+        L --> V[LLM output validator<br/>allow-list + clamping]
+        C --> PL[Make plan<br/>choose tools]
+        V --> PL
+    end
+
+    PL -- no music signal --> OT([Off-topic help message])
+    PL --> R
+
+    subgraph ACT [2. Act]
+        R[Retriever<br/>TF-IDF + phrase match] <--> KB[(Knowledge base<br/>genres.md / moods.md /<br/>activities.md)]
+        S[Catalog search<br/>songs / artists named] <--> CSV[(data/songs.csv<br/>30 songs)]
+        R --> PR[Profile builder<br/>related genres + moods,<br/>energy targets, citations]
+        S --> PR
+        PR --> REC[Recommender<br/>score_song + rank_songs]
+    end
+
+    REC --> CR
+
+    subgraph CHECK [3. Check and revise]
+        CR[Critic<br/>genre / mood / energy fit,<br/>diversity, strength<br/>= confidence 0-1] --> D{High confidence<br/>and no issues?}
+        D -- no, attempts left --> RV[Revise strategy<br/>scoring mode or<br/>diversity penalty]
+        RV --> REC
+    end
+
+    D -- yes / limit reached --> SEL[Select best attempt]
+    SEL --> G2{Output guardrails<br/>songs exist in catalog,<br/>scores finite}
+    G2 --> OUT([Ranked songs + reasons +<br/>confidence + sources])
+
+    SEL -. every step .-> T[(Trace + logs<br/>logs/vibefinder.log,<br/>logs/traces/*.jsonl)]
+
+    subgraph TESTING [Humans and testing]
+        PT[pytest unit tests<br/>38 tests]
+        EV[Eval harness<br/>16 cases x 3 configs +<br/>classifier holdout]
+        HR[Human review<br/>of traces and outputs]
+    end
+    EV -. runs .-> U
+    HR -. reads .-> T
+    HR -. reads .-> OUT
