@@ -4,8 +4,6 @@ VibeFinder AI takes a plain-English request like *"chill lofi for studying"*, *"
 
 It matters because most recommenders are black boxes. This one shows its work at every step, says how sure it is, and is honest when the catalog can't satisfy a request. It also refuses unsafe or off-topic input instead of guessing.
 
-> **Loom walkthrough (optional):** _add your link here_
-
 ---
 
 ## Base project: Music Recommender Simulation (Module 3)
